@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Competition — How I Would Build It</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f6f2;
+    --surface: #ffffff;
+    --border: #e2e0d8;
+    --text: #1a1a18;
+    --muted: #888880;
+    --green: #1D9E75;
+    --green-light: #e8f5f0;
+    --green-mid: #0F6E56;
+    --amber: #d4821a;
+    --amber-light: #fdf3e3;
+    --coral: #c84b30;
+    --coral-light: #fdecea;
+    --blue: #185FA5;
+    --blue-light: #e6f1fb;
+    --mono: 'DM Mono', monospace;
+    --sans: 'DM Sans', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 2rem 1.5rem 5rem;
+  }
+
+  /* HEADER */
+  header {
+    max-width: 760px;
+    margin: 0 auto 2.5rem;
+  }
+
+  .header-tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--green);
+    margin-bottom: 10px;
+  }
+
+  header h1 {
+    font-size: 28px;
+    font-weight: 300;
+    letter-spacing: -.02em;
+    line-height: 1.2;
+    margin-bottom: 12px;
+  }
+
+  header h1 strong {
+    font-weight: 500;
+  }
+
+  .header-rule {
+    height: 1.5px;
+    background: var(--text);
+    margin-bottom: 16px;
+  }
+
+  .header-desc {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.7;
+    max-width: 580px;
+  }
+
+  /* SECTION */
+  .section {
+    max-width: 760px;
+    margin: 0 auto 2rem;
+  }
+
+  .section-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* SITUATION CARD */
+  .situation {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--coral);
+    border-radius: 4px;
+    padding: 1.5rem;
+  }
+
+  .situation p {
+    font-size: 14px;
+    line-height: 1.8;
+    color: var(--text);
+    margin-bottom: 1rem;
+  }
+
+  .situation p:last-child { margin-bottom: 0; }
+
+  .situation strong { font-weight: 500; }
+
+  /* PHASE CARDS */
+  .phases { display: flex; flex-direction: column; gap: 10px; }
+
+  .phase {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    transition: border-color .15s;
+  }
+
+  .phase:hover { border-color: #bbb; }
+
+  .phase-header {
+    display: grid;
+    grid-template-columns: 44px 1fr auto;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 18px;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .phase-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--surface);
+    background: var(--green);
+    border-radius: 2px;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    letter-spacing: .04em;
+  }
+
+  .phase-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .phase-sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  .phase-toggle {
+    font-family: var(--mono);
+    font-size: 16px;
+    color: var(--muted);
+    transition: transform .2s;
+    flex-shrink: 0;
+  }
+
+  .phase.open .phase-toggle { transform: rotate(45deg); color: var(--green); }
+
+  .phase-body {
+    display: none;
+    padding: 0 18px 18px 76px;
+    border-top: 1px solid var(--border);
+    padding-top: 16px;
+  }
+
+  .phase.open .phase-body { display: block; }
+
+  .phase-body ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .phase-body ul li {
+    font-size: 13px;
+    line-height: 1.6;
+    color: var(--text);
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .phase-body ul li::before {
+    content: '→';
+    color: var(--green);
+    font-family: var(--mono);
+    font-size: 12px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .phase-body .note {
+    margin-top: 14px;
+    background: var(--green-light);
+    border-radius: 3px;
+    padding: 10px 14px;
+    font-size: 12px;
+    color: var(--green-mid);
+    font-style: italic;
+    line-height: 1.6;
+  }
+
+  /* TOOLS */
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 8px;
+  }
+
+  .tool-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 14px 16px;
+  }
+
+  .tool-name {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .tool-use {
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* WHY IT MATTERS */
+  .why-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .why-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 14px 16px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .why-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 13px;
+  }
+
+  .why-icon.green { background: var(--green-light); color: var(--green); }
+  .why-icon.amber { background: var(--amber-light); color: var(--amber); }
+  .why-icon.blue { background: var(--blue-light); color: var(--blue); }
+  .why-icon.coral { background: var(--coral-light); color: var(--coral); }
+
+  .why-text strong {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    display: block;
+    margin-bottom: 3px;
+  }
+
+  .why-text span {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  /* FOOTER */
+  footer {
+    max-width: 760px;
+    margin: 3rem auto 0;
+    border-top: 1px solid var(--border);
+    padding-top: 1rem;
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  @media (max-width: 580px) {
+    .why-grid { grid-template-columns: 1fr; }
+    .phase-body { padding-left: 18px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-tag">Case Study · AgRobotics Working Group</div>
+  <h1>Student Competition —<br><strong>How I Would Build It</strong></h1>
+  <div class="header-rule"></div>
+  <p class="header-desc">I haven't worked at AgRobotics WG yet. But when I saw the Student Competition in the job description, something clicked.</p>
+</header>
+
+<!-- SITUATION -->
+<div class="section">
+  <div class="section-label">01 — The situation</div>
+  <div class="situation">
+    <p>A first-edition event. No playbook. No template. No one who has done it before to ask.</p>
+    <p>For some people, that sounds stressful. For me, it sounds familiar.</p>
+    <p>At Meeting Point Turkey, I was responsible for tracking over 500,000 monthly reservations across three international partners. Some months, the numbers didn't add up. Large discrepancies, no obvious explanation, pressure from all sides. I learned quickly that panicking doesn't close the gap. What closes the gap is sitting down, cleaning the data, finding where things broke, and walking into your supervisor's office with a solution in your hand — not just a problem.</p>
+    <p>Building this competition from zero is the same muscle. You don't wait for someone to hand you a checklist. You figure out the first step, you take it, and you write everything down so the person after you has an easier time.</p>
+    <p><strong>This is how I would build it.</strong></p>
+  </div>
+</div>
+
+<!-- APPROACH -->
+<div class="section">
+  <div class="section-label">02 — My approach</div>
+  <div class="phases">
+
+    <div class="phase" id="p1">
+      <div class="phase-header" onclick="toggle('p1')">
+        <div class="phase-num">01</div>
+        <div>
+          <div class="phase-title">Outreach & stakeholder mapping</div>
+          <div class="phase-sub">Building the network from zero</div>
+        </div>
+        <div class="phase-toggle">+</div>
+      </div>
+      <div class="phase-body">
+        <ul>
+          <li>Map universities and colleges with agriculture, engineering, and technology programs across Ontario — University of Guelph, Ridgetown, Niagara College, Fanshawe, and others</li>
+          <li>Identify faculty contacts and student agriculture clubs — build a contact database in Excel with name, institution, email, and follow-up status</li>
+          <li>Draft a clear one-page brief explaining the competition: what it is, who it's for, what students gain, and how to apply</li>
+          <li>Send outreach via email (Mailchimp) and LinkedIn — track open rates and responses to know what's working</li>
+          <li>Follow up personally with any non-responses after two weeks</li>
+        </ul>
+        <div class="note">Everything documented — so year two starts with a warm list, not a cold start.</div>
+      </div>
+    </div>
+
+    <div class="phase" id="p2">
+      <div class="phase-header" onclick="toggle('p2')">
+        <div class="phase-num">02</div>
+        <div>
+          <div class="phase-title">Competition framework</div>
+          <div class="phase-sub">Criteria · judging · submission process</div>
+        </div>
+        <div class="phase-toggle">+</div>
+      </div>
+      <div class="phase-body">
+        <ul>
+          <li>Define the challenge brief: a real problem from the AgRobotics ecosystem that students solve with a proposal or prototype</li>
+          <li>Build a judging rubric — scored on innovation, feasibility, agriculture relevance, and presentation quality</li>
+          <li>Recruit a balanced panel of judges: one producer, one tech company representative, one academic, one from RHA Ventures</li>
+          <li>Set up a simple submission process — Google Form for entries, tracking spreadsheet for status (received / under review / shortlisted / finalist)</li>
+          <li>Create a judge briefing document so every judge scores consistently</li>
+        </ul>
+        <div class="note">The rubric and briefing document become the permanent framework — reusable every year with minor updates.</div>
+      </div>
+    </div>
+
+    <div class="phase" id="p3">
+      <div class="phase-header" onclick="toggle('p3')">
+        <div class="phase-num">03</div>
+        <div>
+          <div class="phase-title">Marketing & communications</div>
+          <div class="phase-sub">Canva · Mailchimp · social media</div>
+        </div>
+        <div class="phase-toggle">+</div>
+      </div>
+      <div class="phase-body">
+        <ul>
+          <li>Design a visual identity for the competition in Canva — consistent with AgRobotics WG branding: logo, colours, fonts</li>
+          <li>Create a content calendar: 6 weeks of posts covering announcement, judge spotlights, application deadline reminders, finalist reveals, and winner announcement</li>
+          <li>Build the email campaign in Mailchimp — launch email, mid-campaign reminder, finalist announcement, post-event recap</li>
+          <li>Graphic assets for each stage: save-the-date card, application open post, judge introduction cards, winner announcement graphic</li>
+          <li>Track engagement with Google Analytics — which posts drove the most application clicks, which emails had the best open rate</li>
+        </ul>
+        <div class="note">Every graphic asset saved in a shared folder, labelled by stage — so next year's coordinator can update the date and post.</div>
+      </div>
+    </div>
+
+    <div class="phase" id="p4">
+      <div class="phase-header" onclick="toggle('p4')">
+        <div class="phase-num">04</div>
+        <div>
+          <div class="phase-title">Event day & documentation</div>
+          <div class="phase-sub">Run-of-show · post-event report</div>
+        </div>
+        <div class="phase-toggle">+</div>
+      </div>
+      <div class="phase-body">
+        <ul>
+          <li>Build a minute-by-minute run-of-show document — who is where, what happens when, who is the backup if something goes wrong</li>
+          <li>Prepare all materials in advance: printed judging sheets, name tags, schedules for presenters, sponsor acknowledgements</li>
+          <li>Capture content on the day — photos, quotes from participants and judges, key moments for post-event social posts</li>
+          <li>Send a post-event survey to participants and judges within 48 hours — collect feedback on what worked and what to improve</li>
+          <li>Write a post-event report: attendance numbers, application volume, social media reach, survey results, and three recommendations for year two</li>
+        </ul>
+        <div class="note">The post-event report is the most important deliverable. It is the playbook for the next edition.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- TOOLS -->
+<div class="section">
+  <div class="section-label">03 — Tools</div>
+  <div class="tools-grid">
+    <div class="tool-card">
+      <div class="tool-name">Canva</div>
+      <div class="tool-use">All visual assets — posts, cards, event materials</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-name">Mailchimp</div>
+      <div class="tool-use">Email campaigns — launch, reminders, recap</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-name">Google Analytics</div>
+      <div class="tool-use">Track campaign performance and application traffic</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-name">Excel</div>
+      <div class="tool-use">Outreach tracker, entry log, judge scoring</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-name">HubSpot</div>
+      <div class="tool-use">Contact management and follow-up tracking</div>
+    </div>
+    <div class="tool-card">
+      <div class="tool-name">Google Forms</div>
+      <div class="tool-use">Submission intake and post-event survey</div>
+    </div>
+  </div>
+</div>
+
+<!-- WHY IT MATTERS -->
+<div class="section">
+  <div class="section-label">04 — Why this matters</div>
+  <div class="why-grid">
+    <div class="why-card">
+      <div class="why-icon green">✓</div>
+      <div class="why-text">
+        <strong>Coordination</strong>
+        <span>Multi-stakeholder from day one — students, judges, sponsors, venues, and media all managed simultaneously</span>
+      </div>
+    </div>
+    <div class="why-card">
+      <div class="why-icon amber">✓</div>
+      <div class="why-text">
+        <strong>Marketing</strong>
+        <span>Full campaign lifecycle — awareness, engagement, conversion, and post-event content</span>
+      </div>
+    </div>
+    <div class="why-card">
+      <div class="why-icon blue">✓</div>
+      <div class="why-text">
+        <strong>Documentation</strong>
+        <span>Every template, rubric, and asset saved — year two starts where year one ended</span>
+      </div>
+    </div>
+    <div class="why-card">
+      <div class="why-icon coral">✓</div>
+      <div class="why-text">
+        <strong>Mission alignment</strong>
+        <span>Engaging future talent in agri-technology — not just a task, a genuine investment in the ecosystem</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <span>Asli Polattas · AgRobotics WG Portfolio</span>
+  <span>agroboticswg.com</span>
+</footer>
+
+<script>
+function toggle(id) {
+  const phase = document.getElementById(id);
+  const isOpen = phase.classList.contains('open');
+  document.querySelectorAll('.phase').forEach(p => p.classList.remove('open'));
+  if (!isOpen) phase.classList.add('open');
+}
+</script>
+
+</body>
+</html>
