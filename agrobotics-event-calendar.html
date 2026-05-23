@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgRobotics WG — Event Calendar</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f7f6f2;
+    --surface: #ffffff;
+    --border: #e2e0d8;
+    --text: #1a1a18;
+    --muted: #888880;
+    --green: #1D9E75;
+    --green-light: #e8f5f0;
+    --amber: #d4821a;
+    --amber-light: #fdf3e3;
+    --red: #c84b30;
+    --mono: 'DM Mono', monospace;
+    --sans: 'DM Sans', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 2rem 1.5rem 4rem;
+  }
+
+  header {
+    max-width: 780px;
+    margin: 0 auto 2rem;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    border-bottom: 1.5px solid var(--text);
+    padding-bottom: 1rem;
+  }
+
+  .header-left h1 {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 4px;
+  }
+
+  .header-left h2 {
+    font-size: 22px;
+    font-weight: 300;
+    letter-spacing: -.02em;
+  }
+
+  .header-left h2 span {
+    font-weight: 500;
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  .dot-live {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--green);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: .4; }
+  }
+
+  /* filters */
+  .filters {
+    max-width: 780px;
+    margin: 0 auto 1.5rem;
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .filter-btn {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border: 1px solid var(--border);
+    border-radius: 2px;
+    background: var(--surface);
+    color: var(--muted);
+    cursor: pointer;
+    transition: all .15s;
+  }
+
+  .filter-btn:hover { border-color: var(--text); color: var(--text); }
+  .filter-btn.active { background: var(--text); color: #fff; border-color: var(--text); }
+
+  /* stats row */
+  .stats {
+    max-width: 780px;
+    margin: 0 auto 1.75rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+
+  .stat {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 14px 16px;
+  }
+
+  .stat-num {
+    font-family: var(--mono);
+    font-size: 24px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .stat-label {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  /* year group */
+  .year-group {
+    max-width: 780px;
+    margin: 0 auto 2rem;
+  }
+
+  .year-heading {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .year-heading::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* event row */
+  .event-row {
+    display: grid;
+    grid-template-columns: 90px 1fr auto;
+    gap: 16px;
+    align-items: start;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 14px 16px;
+    margin-bottom: 6px;
+    transition: border-color .15s, transform .15s;
+    cursor: default;
+  }
+
+  .event-row:hover {
+    border-color: #bbb;
+    transform: translateX(2px);
+  }
+
+  .event-row.upcoming {
+    border-left: 3px solid var(--amber);
+  }
+
+  .event-row.highlight {
+    border-left: 3px solid var(--red);
+  }
+
+  .event-date {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    padding-top: 2px;
+    line-height: 1.5;
+  }
+
+  .event-main {}
+
+  .event-name {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 3px;
+    line-height: 1.4;
+  }
+
+  .event-detail {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+
+  .event-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+  }
+
+  .badge {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: .04em;
+    padding: 3px 8px;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+
+  .badge-done { background: var(--green-light); color: var(--green); }
+  .badge-upcoming { background: var(--amber-light); color: var(--amber); }
+  .badge-key { background: #fdecea; color: var(--red); }
+  .badge-first { background: #eef2ff; color: #4255c4; }
+
+  .attendees {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    text-align: right;
+  }
+
+  .no-results {
+    max-width: 780px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 3rem;
+    color: var(--muted);
+    font-size: 14px;
+    font-family: var(--mono);
+  }
+
+  footer {
+    max-width: 780px;
+    margin: 3rem auto 0;
+    border-top: 1px solid var(--border);
+    padding-top: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  @media (max-width: 600px) {
+    .event-row { grid-template-columns: 1fr; gap: 8px; }
+    .event-meta { flex-direction: row; align-items: center; }
+    .stats { grid-template-columns: 1fr 1fr; }
+    header { flex-direction: column; align-items: flex-start; gap: 8px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <h1>AgRobotics Working Group</h1>
+    <h2>Event <span>Calendar</span></h2>
+  </div>
+  <div class="header-right">
+    <div class="dot-live"></div>
+    Updated May 2026
+  </div>
+</header>
+
+<div class="filters">
+  <button class="filter-btn active" onclick="filter('all')">All</button>
+  <button class="filter-btn" onclick="filter('2024')">2023–24</button>
+  <button class="filter-btn" onclick="filter('2025')">2024–25</button>
+  <button class="filter-btn" onclick="filter('2026')">2025–26</button>
+  <button class="filter-btn" onclick="filter('done')">Completed</button>
+  <button class="filter-btn" onclick="filter('upcoming')">Upcoming</button>
+  <button class="filter-btn" onclick="filter('demo')">Demo days</button>
+</div>
+
+<div class="stats" id="stats">
+  <div class="stat">
+    <div class="stat-num" id="stat-total">—</div>
+    <div class="stat-label">Events shown</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num" id="stat-done">—</div>
+    <div class="stat-label">Completed</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num" id="stat-upcoming">—</div>
+    <div class="stat-label">Upcoming</div>
+  </div>
+</div>
+
+<div id="calendar"></div>
+
+<div class="no-results" id="no-results" style="display:none;">No events match this filter.</div>
+
+<footer>
+  <span>Asli Polattas · AgRobotics WG Portfolio</span>
+  <span>agroboticswg.com</span>
+</footer>
+
+<script>
+const events = [
+  // 2023-24
+  { year: '2024', date: 'Feb 29, 2024', name: 'AgRobotics WG Beta Website Launch', detail: 'First online presence established · AODA-compliant version followed Oct 2024', status: 'done', tags: ['2024'], attendees: null },
+  { year: '2024', date: 'Mar 15, 2024', name: 'Funding Framework Presentation', detail: '5-year funding priorities presented and approved by the Working Group', status: 'done', tags: ['2024'], attendees: null },
+
+  // 2024-25
+  { year: '2025', date: 'Jul 4, 2024', name: 'Demo Day — Bradford Muck Station', detail: 'Orio · FarmDroid FD20 · Nexus Goat · Picketa Sensor', status: 'done', tags: ['2025','demo'], attendees: '107' },
+  { year: '2025', date: 'Jul 11, 2024', name: 'Demo Day — Simcoe Research Station', detail: 'Naio Oz · Burro · VitiRover · AgXeed · HarvestCorp · Vivid Machines · Robust Tractor · Finite Farms · CropTracker', status: 'done', tags: ['2025','demo'], attendees: '201' },
+  { year: '2025', date: 'Sep 10–12, 2024', name: "Canada's Outdoor Farm Show", detail: 'Largest outdoor ag exhibition in Eastern Canada · OMAFA Innovation Pavilion · 7 robots showcased', status: 'done', tags: ['2025'], attendees: '35,000+' },
+  { year: '2025', date: 'Oct 24–25, 2024', name: 'AI for Agri-Food — National Dialogue', detail: 'University of Guelph & CIGI · Panel: "Breaking Down the Adoption Dilemma: Strategies for AgriTech Start-ups"', status: 'done', tags: ['2025'], attendees: null },
+  { year: '2025', date: 'Nov 2024', name: 'Level Up! Career Event', detail: 'Skills and career development focus', status: 'done', tags: ['2025'], attendees: null },
+  { year: '2025', date: 'Nov 2024', name: 'OCTE Guidance Counsellors Panel', detail: 'Ontario Careers education · high school guidance counsellors', status: 'done', tags: ['2025'], attendees: null },
+  { year: '2025', date: 'Feb 2025', name: 'Ontario Fruit & Veg Growers Convention', detail: 'Major producer-facing conference · AgRobotics WG presence', status: 'done', tags: ['2025'], attendees: null },
+  { year: '2025', date: 'Mar 7, 2025', name: 'London Farm Show — First In-Person WG Meeting', detail: 'Western Fair District Grove · Start-up panel: Upside Robotics, Finite Robotics, Mycionics, HarvestCorp · moderated by RHA Ventures', status: 'done', tags: ['2025'], attendees: '81', badge: 'first' },
+  { year: '2025', date: 'Mar 11–13, 2025', name: 'Ottawa Valley Farm Show', detail: 'Largest and longest-running ag trade show in Ontario', status: 'done', tags: ['2025'], attendees: null },
+
+  // 2025-26
+  { year: '2026', date: 'Jul 8, 2025', name: 'Demo Day — Bradford Research Station', detail: '6 robots showcased · 9% producer attendance', status: 'done', tags: ['2026','demo'], attendees: '66' },
+  { year: '2026', date: 'Jul 22, 2025', name: 'Demo Day — Simcoe Research Station', detail: '10 robots showcased · 20% producer attendance', status: 'done', tags: ['2026','demo'], attendees: '201' },
+  { year: '2026', date: 'Aug 27, 2025', name: 'Grape Growers Tailgate Tour — Niagara', detail: '2 robots showcased · producer-heavy audience', status: 'done', tags: ['2026','demo'], attendees: '102' },
+  { year: '2026', date: 'Sep 3, 2025', name: 'Twilight Berry Growers Meeting — Aylmer', detail: '3 robots showcased · mostly producers', status: 'done', tags: ['2026'], attendees: '78' },
+  { year: '2026', date: 'Sep 24, 2025', name: 'Area X.O GC Expo', detail: 'Data being compiled', status: 'done', tags: ['2026'], attendees: null },
+  { year: '2026', date: 'Sep 28, 2025', name: 'AI Event — Guelph', detail: 'AI & agri-food sector focus', status: 'done', tags: ['2026'], attendees: null },
+  { year: '2026', date: 'Nov 11–13, 2025', name: 'Skilled Trades Career Fair', detail: 'Young talent and career pipeline development', status: 'done', tags: ['2026'], attendees: null },
+  { year: '2026', date: 'Nov 18, 2025', name: 'Ag Career Day', detail: 'Agricultural career education event', status: 'done', tags: ['2026'], attendees: null },
+  { year: '2026', date: 'Feb 6–7, 2026', name: 'Northern Ontario Ag Conference', detail: 'Regional focus · northern Ontario producers', status: 'done', tags: ['2026'], attendees: null },
+  { year: '2026', date: 'Feb 18–19, 2026', name: 'Ontario Fruit & Veg Convention', detail: 'Networking opportunity alongside the conference', status: 'done', tags: ['2026'], attendees: null },
+  { year: '2026', date: 'Mar 4, 2026', name: 'Start-Up Focused Event — London Farm Show', detail: 'First-ever start-up event at London Farm Show · created by ARWG', status: 'done', tags: ['2026'], badge: 'first', attendees: null },
+  { year: '2026', date: 'Mar 4–6, 2026', name: 'London Farm Show + WG Networking Dinner', detail: 'Western Fair District Grove · Annual Report launch · networking Friday Mar 6', status: 'done', tags: ['2026'], attendees: null },
+  { year: '2026', date: 'Jun 2026', name: 'OCI / Vineland Demo Day', detail: 'Collaboration with Ontario Crops Research network · date TBD', status: 'upcoming', tags: ['2026','demo'], badge: 'key', attendees: null },
+  { year: '2026', date: 'Jul 21, 2026', name: 'Demo Day — Simcoe Research Station', detail: 'Annual flagship demo day · 2025 edition drew 201 attendees', status: 'upcoming', tags: ['2026','demo'], attendees: null },
+  { year: '2026', date: 'Jul–Aug 2026', name: 'Ontario Apple Grower Tour', detail: 'Orchard-focused field tour · mid-July to August', status: 'upcoming', tags: ['2026'], attendees: null },
+  { year: '2026', date: 'TBD 2026', name: 'Haggerty AgRobotics Demo Day', detail: 'Partner-led field demonstration', status: 'upcoming', tags: ['2026','demo'], attendees: null },
+  { year: '2026', date: 'TBD 2026', name: 'Student AgRobotics Competition — First Edition', detail: 'No previous playbook · outreach, judge coordination, event-day execution — built from zero', status: 'upcoming', tags: ['2026'], badge: 'first', attendees: null },
+  { year: '2026', date: 'Fall 2026', name: 'Greenhouse / Robot Bus Tour', detail: 'Producers visit multiple greenhouse robotics sites by bus · immersive format', status: 'upcoming', tags: ['2026'], attendees: null },
+];
+
+const yearLabels = { '2024': '2023 – 2024', '2025': '2024 – 2025', '2026': '2025 – 2026' };
+let currentFilter = 'all';
+
+function filter(f) {
+  currentFilter = f;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  render();
+}
+
+function render() {
+  const cal = document.getElementById('calendar');
+  const noRes = document.getElementById('no-results');
+  cal.innerHTML = '';
+
+  let filtered = events.filter(e => {
+    if (currentFilter === 'all') return true;
+    if (currentFilter === 'done') return e.status === 'done';
+    if (currentFilter === 'upcoming') return e.status === 'upcoming';
+    if (currentFilter === 'demo') return e.tags.includes('demo');
+    return e.tags.includes(currentFilter);
+  });
+
+  if (filtered.length === 0) { noRes.style.display = 'block'; updateStats(0,0,0); return; }
+  noRes.style.display = 'none';
+
+  const grouped = {};
+  filtered.forEach(e => {
+    if (!grouped[e.year]) grouped[e.year] = [];
+    grouped[e.year].push(e);
+  });
+
+  let total = 0, done = 0, upcoming = 0;
+
+  Object.keys(grouped).sort().forEach(yr => {
+    const group = document.createElement('div');
+    group.className = 'year-group';
+
+    const heading = document.createElement('div');
+    heading.className = 'year-heading';
+    heading.textContent = yearLabels[yr] || yr;
+    group.appendChild(heading);
+
+    grouped[yr].forEach((ev, i) => {
+      total++;
+      if (ev.status === 'done') done++;
+      else upcoming++;
+
+      const row = document.createElement('div');
+      row.className = 'event-row' + (ev.status === 'upcoming' ? (ev.badge === 'key' ? ' highlight' : ' upcoming') : '');
+      row.style.animationDelay = (i * 30) + 'ms';
+
+      let badgeHTML = '';
+      if (ev.badge === 'first') badgeHTML += `<span class="badge badge-first">First edition</span>`;
+      if (ev.badge === 'key') badgeHTML += `<span class="badge badge-key">Key event</span>`;
+      badgeHTML += ev.status === 'done'
+        ? `<span class="badge badge-done">Completed</span>`
+        : `<span class="badge badge-upcoming">Upcoming</span>`;
+
+      const attendeesHTML = ev.attendees
+        ? `<div class="attendees">${ev.attendees}<br>attendees</div>`
+        : '';
+
+      row.innerHTML = `
+        <div class="event-date">${ev.date}</div>
+        <div class="event-main">
+          <div class="event-name">${ev.name}</div>
+          <div class="event-detail">${ev.detail}</div>
+        </div>
+        <div class="event-meta">${badgeHTML}${attendeesHTML}</div>
+      `;
+      group.appendChild(row);
+    });
+
+    cal.appendChild(group);
+  });
+
+  updateStats(total, done, upcoming);
+}
+
+function updateStats(t, d, u) {
+  document.getElementById('stat-total').textContent = t;
+  document.getElementById('stat-done').textContent = d;
+  document.getElementById('stat-upcoming').textContent = u;
+}
+
+render();
+</script>
+</body>
+</html>
