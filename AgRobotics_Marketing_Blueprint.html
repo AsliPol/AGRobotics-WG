@@ -1,0 +1,2079 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgRobotics Marketing Blueprint — Asli Polattas</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=DM+Mono:wght@300;400;500&family=Cabinet+Grotesk:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --ink: #0D1208;
+  --forest: #1C3A12;
+  --moss: #3D6B2C;
+  --sage: #7AAB62;
+  --sage-pale: #B8D4A8;
+  --cream: #F5F0E8;
+  --sand: #E8DFCC;
+  --terracotta: #C4622D;
+  --gold: #B8962E;
+  --white: #FEFCF8;
+  --muted: #6B7A61;
+  --border: rgba(60,90,45,0.15);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Cabinet Grotesk', sans-serif;
+  background: var(--cream);
+  color: var(--ink);
+  overflow-x: hidden;
+}
+
+/* ─── GRAIN OVERLAY ─── */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1000;
+  opacity: 0.4;
+}
+
+/* ─── HEADER / HERO ─── */
+.hero {
+  min-height: 100vh;
+  background: var(--forest);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 6rem 4rem 6rem 5rem;
+  position: relative;
+  z-index: 2;
+}
+
+.hero-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--sage);
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.hero-eyebrow::before {
+  content: '';
+  display: block;
+  width: 40px;
+  height: 1px;
+  background: var(--sage);
+}
+
+.hero-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(3.5rem, 6vw, 6rem);
+  font-weight: 700;
+  color: var(--cream);
+  line-height: 1.0;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.02em;
+}
+
+.hero-title em {
+  font-style: italic;
+  color: var(--sage);
+}
+
+.hero-subtitle {
+  font-size: 1rem;
+  color: rgba(245,240,232,0.6);
+  line-height: 1.7;
+  max-width: 420px;
+  margin-bottom: 3rem;
+}
+
+.hero-by {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.hero-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--sage);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--forest);
+  flex-shrink: 0;
+}
+
+.hero-by-text strong {
+  display: block;
+  color: var(--cream);
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+.hero-by-text span {
+  color: rgba(245,240,232,0.5);
+  font-size: 0.8rem;
+}
+
+.hero-right {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 6rem 4rem;
+}
+
+.hero-right-bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(61,107,44,0.3) 0%, transparent 60%);
+}
+
+.chapter-nav {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.chapter-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  padding: 1.4rem 1.8rem;
+  background: rgba(245,240,232,0.04);
+  border: 1px solid rgba(245,240,232,0.08);
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.chapter-nav-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--terracotta);
+  transform: scaleY(0);
+  transition: transform 0.3s ease;
+}
+
+.chapter-nav-item:hover {
+  background: rgba(245,240,232,0.08);
+  border-color: rgba(245,240,232,0.15);
+}
+
+.chapter-nav-item:hover::before {
+  transform: scaleY(1);
+}
+
+.chapter-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--sage);
+  letter-spacing: 0.1em;
+  min-width: 24px;
+}
+
+.chapter-info strong {
+  display: block;
+  color: var(--cream);
+  font-size: 0.95rem;
+  font-weight: 700;
+  margin-bottom: 0.2rem;
+}
+
+.chapter-info span {
+  color: rgba(245,240,232,0.45);
+  font-size: 0.78rem;
+}
+
+.chapter-icon {
+  margin-left: auto;
+  font-size: 1.2rem;
+  opacity: 0.5;
+}
+
+/* ─── DECORATIVE CIRCLES ─── */
+.hero-deco {
+  position: absolute;
+  right: -80px;
+  bottom: -80px;
+  width: 350px;
+  height: 350px;
+  border-radius: 50%;
+  border: 1px solid rgba(122,171,98,0.15);
+  z-index: 1;
+}
+.hero-deco-2 {
+  position: absolute;
+  right: -30px;
+  bottom: -30px;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  border: 1px solid rgba(122,171,98,0.1);
+  z-index: 1;
+}
+
+/* ─── CONTEXT STRIP ─── */
+.context-strip {
+  background: var(--terracotta);
+  padding: 1rem 5rem;
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  overflow-x: auto;
+}
+
+.context-item {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  white-space: nowrap;
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.85);
+}
+
+.context-item strong {
+  color: #fff;
+  font-weight: 700;
+}
+
+.context-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.3);
+  flex-shrink: 0;
+}
+
+/* ─── SECTION LAYOUT ─── */
+.section {
+  padding: 7rem 5rem;
+  position: relative;
+}
+
+.section:nth-child(even) {
+  background: var(--white);
+}
+
+.section-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--terracotta);
+  margin-bottom: 0.8rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.section-label::after {
+  content: '';
+  flex: 1;
+  max-width: 60px;
+  height: 1px;
+  background: var(--terracotta);
+  opacity: 0.4;
+}
+
+.section-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.5rem, 4vw, 3.8rem);
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--forest);
+  margin-bottom: 1rem;
+}
+
+.section-lead {
+  font-size: 1.05rem;
+  color: var(--muted);
+  max-width: 600px;
+  line-height: 1.75;
+  margin-bottom: 4rem;
+}
+
+/* ─── CHAPTER 1: SOCIAL MEDIA AUDIT ─── */
+#chapter-1 { background: var(--cream); }
+
+.audit-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.audit-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 2rem;
+  position: relative;
+}
+
+.audit-card.problem {
+  border-left: 4px solid #D44;
+}
+
+.audit-card.opportunity {
+  border-left: 4px solid var(--sage);
+}
+
+.audit-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.7rem;
+  border-radius: 2px;
+  margin-bottom: 1rem;
+  display: inline-block;
+}
+
+.audit-tag.red { background: #FDEAEA; color: #C33; }
+.audit-tag.green { background: #EAF3E8; color: var(--moss); }
+
+.audit-card h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--forest);
+  margin-bottom: 0.6rem;
+}
+
+.audit-card p {
+  font-size: 0.88rem;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.audit-stat {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+  margin-top: 1rem;
+}
+
+.audit-stat-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--forest);
+}
+
+.audit-stat-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.7rem;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+}
+
+/* Content Calendar */
+.calendar-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--forest);
+  margin-bottom: 0.5rem;
+  margin-top: 3rem;
+}
+
+.calendar-sub {
+  font-size: 0.85rem;
+  color: var(--muted);
+  margin-bottom: 1.5rem;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.8rem;
+}
+
+.cal-day {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 1rem;
+  min-height: 140px;
+  position: relative;
+}
+
+.cal-day-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.8rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.cal-day-num {
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--sage-pale);
+}
+
+.cal-post {
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: var(--ink);
+  margin-bottom: 0.5rem;
+}
+
+.cal-post-type {
+  display: inline-block;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  padding: 0.15rem 0.5rem;
+  border-radius: 2px;
+  margin-top: 0.4rem;
+}
+
+.type-li { background: #E8F0FE; color: #1A5BBE; }
+.type-reel { background: #FEF0E8; color: #B85C1A; }
+.type-news { background: #E8F5E8; color: #1A7A2E; }
+.type-event { background: #F5E8FE; color: #7A1ABE; }
+.type-story { background: #FEF8E8; color: #B89A1A; }
+
+.cal-empty {
+  background: var(--sand);
+  border-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cal-empty span {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  color: rgba(0,0,0,0.2);
+  letter-spacing: 0.1em;
+}
+
+/* ─── CHAPTER 2: EMAIL CAMPAIGN ─── */
+#chapter-2 { background: var(--white); }
+
+.email-layout {
+  display: grid;
+  grid-template-columns: 1fr 1.3fr;
+  gap: 4rem;
+  align-items: start;
+}
+
+.email-strategy h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--forest);
+  margin-bottom: 1.5rem;
+}
+
+.strategy-block {
+  margin-bottom: 1.8rem;
+  padding-bottom: 1.8rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.strategy-block:last-child {
+  border-bottom: none;
+}
+
+.strategy-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--terracotta);
+  margin-bottom: 0.5rem;
+}
+
+.strategy-block h4 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--forest);
+  margin-bottom: 0.4rem;
+}
+
+.strategy-block p {
+  font-size: 0.85rem;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.6rem;
+}
+
+.tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  padding: 0.3rem 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+}
+
+/* Email Mockup */
+.email-mockup {
+  background: #F8F9FA;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+}
+
+.email-chrome {
+  background: #E8E8E8;
+  padding: 0.8rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.email-chrome-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+.dot-r { background: #FF5F57; }
+.dot-y { background: #FEBC2E; }
+.dot-g { background: #28C840; }
+
+.email-chrome-bar {
+  flex: 1;
+  height: 20px;
+  background: #fff;
+  border-radius: 3px;
+  margin-left: 0.5rem;
+  display: flex;
+  align-items: center;
+  padding: 0 0.6rem;
+}
+
+.email-chrome-url {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  color: #888;
+}
+
+.email-preview {
+  padding: 2rem;
+  background: #fff;
+}
+
+.email-preview-header {
+  background: var(--forest);
+  padding: 2rem;
+  margin: -2rem -2rem 0;
+  margin-bottom: 0;
+}
+
+.email-logo-line {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 1.5rem;
+}
+
+.email-logo-badge {
+  background: var(--sage);
+  color: var(--forest);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  font-weight: 500;
+  padding: 0.3rem 0.7rem;
+  border-radius: 2px;
+  letter-spacing: 0.08em;
+}
+
+.email-logo-text {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem;
+  color: var(--cream);
+  font-weight: 600;
+}
+
+.email-preview-headline {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--cream);
+  line-height: 1.2;
+  margin-bottom: 0.8rem;
+}
+
+.email-preview-subline {
+  font-size: 0.82rem;
+  color: rgba(245,240,232,0.6);
+  line-height: 1.6;
+}
+
+.email-body {
+  padding: 1.5rem 0 0;
+}
+
+.email-meta {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.2rem;
+  flex-wrap: wrap;
+}
+
+.email-meta-chip {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  padding: 0.25rem 0.6rem;
+  border-radius: 2px;
+  letter-spacing: 0.06em;
+}
+
+.chip-from { background: #EAF3E8; color: var(--moss); }
+.chip-to { background: #E8F0FE; color: #1A5BBE; }
+.chip-subject { background: #FEF5E8; color: #B87A1A; }
+
+.email-body-text {
+  font-size: 0.82rem;
+  color: #444;
+  line-height: 1.7;
+  margin-bottom: 1rem;
+}
+
+.email-cta {
+  display: inline-block;
+  background: var(--terracotta);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.8rem;
+  padding: 0.7rem 1.5rem;
+  border-radius: 3px;
+  text-decoration: none;
+  margin: 0.5rem 0 1rem;
+}
+
+.email-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 1rem 0;
+}
+
+.email-highlight-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.8rem;
+  margin-top: 0.8rem;
+}
+
+.email-highlight {
+  text-align: center;
+  padding: 0.8rem;
+  background: var(--cream);
+  border-radius: 4px;
+}
+
+.email-highlight-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--forest);
+  display: block;
+}
+
+.email-highlight-label {
+  font-size: 0.65rem;
+  color: var(--muted);
+}
+
+/* ─── CHAPTER 3: ANALYTICS DASHBOARD ─── */
+#chapter-3 { background: var(--cream); }
+
+.dashboard {
+  background: var(--white);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  overflow: hidden;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.06);
+}
+
+.dashboard-header {
+  background: var(--ink);
+  padding: 1.2rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.dashboard-title {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.6);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.dashboard-period {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--sage);
+  letter-spacing: 0.08em;
+}
+
+.dashboard-kpis {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  border-bottom: 1px solid var(--border);
+}
+
+.kpi {
+  padding: 1.8rem 2rem;
+  border-right: 1px solid var(--border);
+  position: relative;
+}
+
+.kpi:last-child { border-right: none; }
+
+.kpi-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.5rem;
+}
+
+.kpi-value {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: var(--forest);
+  line-height: 1;
+  margin-bottom: 0.3rem;
+}
+
+.kpi-change {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.04em;
+}
+
+.kpi-change.up { color: #2A8A3A; }
+.kpi-change.down { color: #C33; }
+
+.kpi-bar {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--border);
+}
+
+.kpi-bar-fill {
+  height: 100%;
+  background: var(--sage);
+  transition: width 1.5s ease;
+}
+
+.dashboard-body {
+  display: grid;
+  grid-template-columns: 1.8fr 1fr;
+  gap: 0;
+}
+
+.chart-area {
+  padding: 2rem;
+  border-right: 1px solid var(--border);
+}
+
+.chart-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--forest);
+  margin-bottom: 0.3rem;
+}
+
+.chart-sub {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  color: var(--muted);
+  letter-spacing: 0.06em;
+  margin-bottom: 1.5rem;
+}
+
+/* SVG Bar Chart */
+.bar-chart-wrap {
+  position: relative;
+  height: 160px;
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  padding-bottom: 24px;
+}
+
+.bar-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  height: 100%;
+  justify-content: flex-end;
+}
+
+.bar {
+  width: 100%;
+  border-radius: 3px 3px 0 0;
+  min-height: 4px;
+  position: relative;
+}
+
+.bar.primary { background: var(--moss); }
+.bar.secondary { background: var(--sage-pale); }
+
+.bar-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.55rem;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  text-align: center;
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+.chart-legend {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  color: var(--muted);
+}
+
+.legend-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
+
+/* Top Pages Table */
+.top-pages {
+  padding: 2rem;
+}
+
+.top-pages-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--forest);
+  margin-bottom: 1.2rem;
+}
+
+.pages-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.pages-table th {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-align: left;
+  padding: 0 0 0.6rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.pages-table td {
+  font-size: 0.78rem;
+  color: var(--ink);
+  padding: 0.65rem 0;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+
+.pages-table tr:last-child td { border-bottom: none; }
+
+.page-path {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--moss);
+}
+
+.bar-mini {
+  height: 4px;
+  background: var(--sage-pale);
+  border-radius: 2px;
+  margin-top: 4px;
+}
+
+.bar-mini-fill {
+  height: 100%;
+  background: var(--sage);
+  border-radius: 2px;
+}
+
+.dashboard-insights {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-top: 1px solid var(--border);
+}
+
+.insight {
+  padding: 1.5rem 2rem;
+  border-right: 1px solid var(--border);
+}
+
+.insight:last-child { border-right: none; }
+
+.insight-icon {
+  font-size: 1.2rem;
+  margin-bottom: 0.6rem;
+  display: block;
+}
+
+.insight-title {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--forest);
+  margin-bottom: 0.3rem;
+}
+
+.insight-text {
+  font-size: 0.78rem;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+/* ─── CHAPTER 4: EVENT COMMS KIT ─── */
+#chapter-4 { background: var(--white); }
+
+.comms-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+}
+
+.comms-tabs {
+  display: flex;
+  gap: 0;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid var(--border);
+}
+
+.tab-btn {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.7rem 1.2rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--muted);
+  position: relative;
+  transition: color 0.2s;
+}
+
+.tab-btn.active {
+  color: var(--terracotta);
+}
+
+.tab-btn.active::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--terracotta);
+}
+
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+.email-template {
+  background: var(--cream);
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+}
+
+.email-template-header {
+  background: var(--forest);
+  padding: 1.2rem 1.5rem;
+}
+
+.email-template-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  color: var(--sage);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 0.4rem;
+}
+
+.email-template-subject {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--cream);
+}
+
+.email-template-body {
+  padding: 1.5rem;
+}
+
+.email-template-body p {
+  font-size: 0.82rem;
+  color: #444;
+  line-height: 1.75;
+  margin-bottom: 1rem;
+}
+
+.email-field {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 0.5rem 0.8rem;
+  margin: 0.3rem 0;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--terracotta);
+  display: inline-block;
+}
+
+.checklist {
+  background: var(--cream);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.checklist-header {
+  background: var(--ink);
+  padding: 0.9rem 1.3rem;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--sage);
+}
+
+.checklist-section {
+  border-bottom: 1px solid var(--border);
+}
+
+.checklist-section:last-child {
+  border-bottom: none;
+}
+
+.checklist-section-title {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 0.8rem 1.3rem 0.4rem;
+}
+
+.checklist-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+  padding: 0.45rem 1.3rem;
+}
+
+.check-box {
+  width: 14px;
+  height: 14px;
+  border: 1.5px solid var(--sage);
+  border-radius: 2px;
+  flex-shrink: 0;
+  margin-top: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.check-box.checked {
+  background: var(--sage);
+}
+
+.check-box.checked::after {
+  content: '✓';
+  font-size: 9px;
+  color: #fff;
+  font-weight: 700;
+}
+
+.checklist-item span {
+  font-size: 0.78rem;
+  color: var(--ink);
+  line-height: 1.5;
+}
+
+.checklist-item span.done {
+  color: var(--muted);
+  text-decoration: line-through;
+  text-decoration-color: var(--sage);
+}
+
+/* ─── APPROACH & PHILOSOPHY ─── */
+.comms-right h3 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--forest);
+  margin-bottom: 1.5rem;
+}
+
+.approach-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.approach-item {
+  display: flex;
+  gap: 1.2rem;
+  padding: 1.2rem;
+  background: var(--cream);
+  border-radius: 4px;
+  border: 1px solid var(--border);
+}
+
+.approach-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--sage-pale);
+  line-height: 1;
+  flex-shrink: 0;
+  min-width: 2.5rem;
+}
+
+.approach-text strong {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--forest);
+  margin-bottom: 0.3rem;
+}
+
+.approach-text p {
+  font-size: 0.8rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* ─── CLOSING ─── */
+.closing {
+  background: var(--forest);
+  padding: 7rem 5rem;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 6rem;
+  align-items: center;
+}
+
+.closing-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: clamp(2.5rem, 4vw, 4rem);
+  font-weight: 700;
+  color: var(--cream);
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+}
+
+.closing-title em {
+  font-style: italic;
+  color: var(--sage);
+}
+
+.closing-text {
+  font-size: 1rem;
+  color: rgba(245,240,232,0.65);
+  line-height: 1.75;
+  margin-bottom: 2.5rem;
+}
+
+.closing-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.closing-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  border: 1px solid rgba(245,240,232,0.12);
+  border-radius: 4px;
+  text-decoration: none;
+  color: var(--cream);
+  font-size: 0.88rem;
+  font-weight: 600;
+  transition: all 0.25s ease;
+}
+
+.closing-link:hover {
+  background: rgba(245,240,232,0.08);
+  border-color: rgba(245,240,232,0.25);
+}
+
+.closing-link span {
+  font-size: 1rem;
+}
+
+.closing-right {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.cert-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.8rem;
+}
+
+.cert-badge {
+  background: rgba(245,240,232,0.04);
+  border: 1px solid rgba(245,240,232,0.1);
+  border-radius: 4px;
+  padding: 0.9rem;
+  text-align: center;
+}
+
+.cert-badge-icon {
+  font-size: 1.4rem;
+  display: block;
+  margin-bottom: 0.4rem;
+}
+
+.cert-badge-name {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  color: var(--sage);
+  text-transform: uppercase;
+}
+
+.closing-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  color: rgba(245,240,232,0.35);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 0.8rem;
+}
+
+/* ─── FOOTER ─── */
+footer {
+  background: var(--ink);
+  padding: 1.5rem 5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+footer p {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  color: rgba(255,255,255,0.3);
+  letter-spacing: 0.08em;
+}
+
+/* ─── ANIMATIONS ─── */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal:nth-child(2) { transition-delay: 0.1s; }
+.reveal:nth-child(3) { transition-delay: 0.2s; }
+.reveal:nth-child(4) { transition-delay: 0.3s; }
+.reveal:nth-child(5) { transition-delay: 0.4s; }
+
+/* Hero animations */
+@keyframes fadeSlide {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.hero-left > * {
+  opacity: 0;
+  animation: fadeSlide 0.7s ease forwards;
+}
+.hero-left > *:nth-child(1) { animation-delay: 0.1s; }
+.hero-left > *:nth-child(2) { animation-delay: 0.25s; }
+.hero-left > *:nth-child(3) { animation-delay: 0.4s; }
+.hero-left > *:nth-child(4) { animation-delay: 0.55s; }
+.hero-left > *:nth-child(5) { animation-delay: 0.65s; }
+
+.chapter-nav-item {
+  opacity: 0;
+  animation: fadeSlide 0.6s ease forwards;
+}
+.chapter-nav-item:nth-child(1) { animation-delay: 0.5s; }
+.chapter-nav-item:nth-child(2) { animation-delay: 0.62s; }
+.chapter-nav-item:nth-child(3) { animation-delay: 0.74s; }
+.chapter-nav-item:nth-child(4) { animation-delay: 0.86s; }
+
+@media (max-width: 900px) {
+  .hero { grid-template-columns: 1fr; }
+  .hero-right { display: none; }
+  .section { padding: 4rem 2rem; }
+  .audit-grid { grid-template-columns: 1fr; }
+  .calendar-grid { grid-template-columns: repeat(3, 1fr); }
+  .email-layout { grid-template-columns: 1fr; }
+  .dashboard-kpis { grid-template-columns: repeat(2, 1fr); }
+  .dashboard-body { grid-template-columns: 1fr; }
+  .dashboard-insights { grid-template-columns: 1fr; }
+  .comms-layout { grid-template-columns: 1fr; }
+  .closing { grid-template-columns: 1fr; }
+  footer { flex-direction: column; gap: 0.5rem; }
+  .context-strip { padding: 1rem 2rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">Marketing Blueprint · AgRobotics WG</div>
+    <h1 class="hero-title">What I'd do<br>in my <em>first<br>90 days.</em></h1>
+    <p class="hero-subtitle">A working demonstration of marketing, communications, and coordination skills — built specifically for the AgRobotics Working Group at Western Fair District.</p>
+    <div class="hero-by">
+      <div class="hero-avatar">A</div>
+      <div class="hero-by-text">
+        <strong>Asli Polattas</strong>
+        <span>Project Coordinator · Marketing & Communications</span>
+      </div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-right-bg"></div>
+    <nav class="chapter-nav">
+      <a href="#chapter-1" class="chapter-nav-item">
+        <span class="chapter-num">01</span>
+        <div class="chapter-info">
+          <strong>Social Media Audit & Content Calendar</strong>
+          <span>LinkedIn gap analysis + 30-day content plan</span>
+        </div>
+        <span class="chapter-icon">→</span>
+      </a>
+      <a href="#chapter-2" class="chapter-nav-item">
+        <span class="chapter-num">02</span>
+        <div class="chapter-info">
+          <strong>Email Campaign — Member Outreach</strong>
+          <span>Mailchimp strategy + live mock-up</span>
+        </div>
+        <span class="chapter-icon">→</span>
+      </a>
+      <a href="#chapter-3" class="chapter-nav-item">
+        <span class="chapter-num">03</span>
+        <div class="chapter-info">
+          <strong>Analytics & Reporting Dashboard</strong>
+          <span>What I'd track, why, and how I'd report it</span>
+        </div>
+        <span class="chapter-icon">→</span>
+      </a>
+      <a href="#chapter-4" class="chapter-nav-item">
+        <span class="chapter-num">04</span>
+        <div class="chapter-info">
+          <strong>Student Competition — Event Comms Kit</strong>
+          <span>Templates, judge outreach, event checklist</span>
+        </div>
+        <span class="chapter-icon">→</span>
+      </a>
+    </nav>
+    <div class="hero-deco"></div>
+    <div class="hero-deco-2"></div>
+  </div>
+</header>
+
+<!-- CONTEXT STRIP -->
+<div class="context-strip">
+  <div class="context-item"><strong>Role:</strong> Project Coordinator — AgRobotics</div>
+  <div class="context-dot"></div>
+  <div class="context-item"><strong>Org:</strong> Western Fair District · Innovation Farms Ontario</div>
+  <div class="context-dot"></div>
+  <div class="context-item"><strong>Tools used:</strong> Canva · Mailchimp · HubSpot · Google Analytics · Squarespace</div>
+  <div class="context-dot"></div>
+  <div class="context-item"><strong>Prepared by:</strong> Asli Polattas · aslipolattas@gmail.com</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     CHAPTER 1 — SOCIAL MEDIA AUDIT
+════════════════════════════════════════════════ -->
+<section class="section" id="chapter-1">
+  <div class="section-label">Chapter 01</div>
+  <h2 class="section-title">Social Media Audit<br>& Content Strategy</h2>
+  <p class="section-lead">I reviewed the AgRobotics LinkedIn page, website, and press releases. Here's what I found — and exactly how I'd fix it.</p>
+
+  <div class="audit-grid reveal">
+    <div class="audit-card problem">
+      <span class="audit-tag red">Gap Found</span>
+      <h3>Demo days aren't becoming content</h3>
+      <p>The program runs 10+ demo days and field trials per year. Almost none of these appear on LinkedIn within 48 hours. Each event is a lost opportunity for member engagement, sponsor visibility, and public credibility.</p>
+      <div class="audit-stat">
+        <span class="audit-stat-num">10+</span>
+        <span class="audit-stat-label">demo days/year<br>under-reported</span>
+      </div>
+    </div>
+    <div class="audit-card problem">
+      <span class="audit-tag red">Gap Found</span>
+      <h3>Posting cadence is inconsistent</h3>
+      <p>Posts appear in bursts around events, then go quiet for weeks. Inconsistent cadence reduces algorithm reach and signals low activity to prospective members and funders who visit the page.</p>
+      <div class="audit-stat">
+        <span class="audit-stat-num">~4×</span>
+        <span class="audit-stat-label">posts/month<br>vs. target 15–20×</span>
+      </div>
+    </div>
+    <div class="audit-card opportunity">
+      <span class="audit-tag green">Opportunity</span>
+      <h3>Member spotlights — untapped</h3>
+      <p>University of Guelph, Nortera Foods, Ian Smith, Bradford Muck Station — these are great stories. Behind-the-scenes researcher profiles and farmer perspectives would drive organic engagement and position AgRobotics as a human story, not just a technology program.</p>
+    </div>
+    <div class="audit-card opportunity">
+      <span class="audit-tag green">Opportunity</span>
+      <h3>Annual report = 20+ content pieces</h3>
+      <p>The 2024–25 Annual Report is packed with data, findings, and photos. A single report should generate an entire quarter's worth of content — stat cards, robot highlights, trial results, partner features.</p>
+      <div class="audit-stat">
+        <span class="audit-stat-num">20+</span>
+        <span class="audit-stat-label">posts from<br>1 annual report</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTENT CALENDAR -->
+  <div class="calendar-title reveal">30-Day Content Calendar — Week 1–4</div>
+  <p class="calendar-sub reveal">Every demo day, meeting, and milestone becomes at least 3 pieces of content.</p>
+
+  <div class="calendar-grid reveal">
+    <!-- Week headers -->
+    <div style="grid-column:1/-1;display:grid;grid-template-columns:repeat(5,1fr);gap:0.8rem;margin-bottom:0.3rem;">
+      <div style="font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.1em;color:var(--muted);text-transform:uppercase;text-align:center;">Mon</div>
+      <div style="font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.1em;color:var(--muted);text-transform:uppercase;text-align:center;">Tue</div>
+      <div style="font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.1em;color:var(--muted);text-transform:uppercase;text-align:center;">Wed</div>
+      <div style="font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.1em;color:var(--muted);text-transform:uppercase;text-align:center;">Thu</div>
+      <div style="font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.1em;color:var(--muted);text-transform:uppercase;text-align:center;">Fri</div>
+    </div>
+
+    <!-- Week 1 -->
+    <div class="cal-day">
+      <div class="cal-day-label">Week 1 <span class="cal-day-num">1</span></div>
+      <p class="cal-post">Program intro — "Did you know AgRobotics has tested X robots across Ontario?"</p>
+      <span class="cal-post-type type-li">LinkedIn Post</span>
+    </div>
+    <div class="cal-day cal-empty"><span>No post</span></div>
+    <div class="cal-day">
+      <div class="cal-day-label"><span class="cal-day-num">3</span></div>
+      <p class="cal-post">Annual Report highlight: FarmDroid trial results — stat card graphic (Canva)</p>
+      <span class="cal-post-type type-story">Infographic</span>
+    </div>
+    <div class="cal-day cal-empty"><span>No post</span></div>
+    <div class="cal-day">
+      <div class="cal-day-label"><span class="cal-day-num">5</span></div>
+      <p class="cal-post">Member spotlight: Ian Smith (Farmer) — "Why I said yes to robot trials on my farm"</p>
+      <span class="cal-post-type type-li">LinkedIn Post</span>
+    </div>
+
+    <!-- Week 2 -->
+    <div class="cal-day">
+      <div class="cal-day-label">Week 2 <span class="cal-day-num">8</span></div>
+      <p class="cal-post">Behind the scenes: Nexus robot weeding lettuce — short video clip or photo series</p>
+      <span class="cal-post-type type-reel">Reel / Carousel</span>
+    </div>
+    <div class="cal-day cal-empty"><span>No post</span></div>
+    <div class="cal-day">
+      <div class="cal-day-label"><span class="cal-day-num">10</span></div>
+      <p class="cal-post">"This week in AgRobotics" — upcoming demo day preview + registration CTA</p>
+      <span class="cal-post-type type-news">News</span>
+    </div>
+    <div class="cal-day">
+      <div class="cal-day-label"><span class="cal-day-num">11</span></div>
+      <p class="cal-post">DEMO DAY — live photos, real-time update, tag partners</p>
+      <span class="cal-post-type type-event">Event Day</span>
+    </div>
+    <div class="cal-day">
+      <div class="cal-day-label"><span class="cal-day-num">12</span></div>
+      <p class="cal-post">Demo Day recap: key findings + quote from researcher (Picketa LENS™ trial)</p>
+      <span class="cal-post-type type-li">LinkedIn Post</span>
+    </div>
+
+    <!-- Week 3 -->
+    <div class="cal-day">
+      <div class="cal-day-label">Week 3 <span class="cal-day-num">15</span></div>
+      <p class="cal-post">Partner spotlight: University of Guelph — weed scouting autonomous trial</p>
+      <span class="cal-post-type type-li">LinkedIn Post</span>
+    </div>
+    <div class="cal-day cal-empty"><span>No post</span></div>
+    <div class="cal-day">
+      <div class="cal-day-label"><span class="cal-day-num">17</span></div>
+      <p class="cal-post">Student Competition announcement — open to Ontario ag students, deadline + CTA</p>
+      <span class="cal-post-type type-event">Event Promo</span>
+    </div>
+    <div class="cal-day cal-empty"><span>No post</span></div>
+    <div class="cal-day">
+      <div class="cal-day-label"><span class="cal-day-num">19</span></div>
+      <p class="cal-post">Did you know? Orio robot — chemical vs. mechanical weed control results</p>
+      <span class="cal-post-type type-story">Data Story</span>
+    </div>
+
+    <!-- Week 4 -->
+    <div class="cal-day">
+      <div class="cal-day-label">Week 4 <span class="cal-day-num">22</span></div>
+      <p class="cal-post">Working Group meeting recap — decisions made, next steps (member transparency)</p>
+      <span class="cal-post-type type-news">Update</span>
+    </div>
+    <div class="cal-day cal-empty"><span>No post</span></div>
+    <div class="cal-day">
+      <div class="cal-day-label"><span class="cal-day-num">24</span></div>
+      <p class="cal-post">Nortera Foods partnership feature — row crop weed scouting in lima beans</p>
+      <span class="cal-post-type type-li">LinkedIn Post</span>
+    </div>
+    <div class="cal-day cal-empty"><span>No post</span></div>
+    <div class="cal-day">
+      <div class="cal-day-label"><span class="cal-day-num">26</span></div>
+      <p class="cal-post">Month recap: engagement stats, what worked, what's next. Tease next month.</p>
+      <span class="cal-post-type type-story">Monthly Wrap</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     CHAPTER 2 — EMAIL CAMPAIGN
+════════════════════════════════════════════════ -->
+<section class="section" id="chapter-2">
+  <div class="section-label">Chapter 02</div>
+  <h2 class="section-title">Email Campaign —<br>Member & Sponsor Outreach</h2>
+  <p class="section-lead">A Mailchimp-ready campaign strategy for re-engaging current members, updating sponsors, and driving Student Competition registrations.</p>
+
+  <div class="email-layout">
+    <div class="email-strategy reveal">
+      <h3>Campaign Strategy</h3>
+
+      <div class="strategy-block">
+        <div class="strategy-label">Audience Segmentation</div>
+        <h4>3 distinct lists — 3 distinct messages</h4>
+        <p>Sending one email to everyone wastes reach. Members, sponsors, and student prospects each need different content, tone, and CTAs.</p>
+        <div class="tag-list">
+          <span class="tag">Working Group Members</span>
+          <span class="tag">Industry Sponsors</span>
+          <span class="tag">Student Prospects</span>
+        </div>
+      </div>
+
+      <div class="strategy-block">
+        <div class="strategy-label">Subject Line Strategy</div>
+        <h4>Test 2 subject lines per send (A/B)</h4>
+        <p>HubSpot training taught me A/B testing on subject lines drives 20–30% open rate improvement. I'd test curiosity vs. direct benefit every campaign.</p>
+        <div class="tag-list">
+          <span class="tag">A: "What happened in Bradford last week?"</span>
+          <span class="tag">B: "AgRobotics Q1 2026 — demo results inside"</span>
+        </div>
+      </div>
+
+      <div class="strategy-block">
+        <div class="strategy-label">Send Cadence</div>
+        <h4>Monthly digest + event-triggered sends</h4>
+        <p>Monthly newsletter keeps baseline engagement. Triggered sends (post-demo, competition launch, annual report release) hit when interest is highest.</p>
+      </div>
+
+      <div class="strategy-block">
+        <div class="strategy-label">KPIs I'd track</div>
+        <h4>Open rate · CTR · Unsubscribe · Conversion</h4>
+        <p>Every campaign generates a one-page Google Data Studio summary — shared at the next Working Group meeting.</p>
+      </div>
+    </div>
+
+    <!-- EMAIL MOCKUP -->
+    <div class="email-mockup reveal">
+      <div class="email-chrome">
+        <div class="email-chrome-dot dot-r"></div>
+        <div class="email-chrome-dot dot-y"></div>
+        <div class="email-chrome-dot dot-g"></div>
+        <div class="email-chrome-bar">
+          <span class="email-chrome-url">mailchimp.com · AgRobotics Member Newsletter — May 2026</span>
+        </div>
+      </div>
+
+      <div class="email-preview">
+        <div class="email-preview-header">
+          <div class="email-logo-line">
+            <span class="email-logo-badge">AGROBOTICS WG</span>
+            <span class="email-logo-text">Innovation Farms Ontario</span>
+          </div>
+          <h2 class="email-preview-headline">Spring 2026:<br>What we built, tested,<br>and proved.</h2>
+          <p class="email-preview-subline">Member newsletter · Q1–Q2 2026 · Western Fair District</p>
+        </div>
+
+        <div class="email-body">
+          <div class="email-meta">
+            <span class="email-meta-chip chip-from">From: AgRobotics WG</span>
+            <span class="email-meta-chip chip-to">To: Working Group Members</span>
+            <span class="email-meta-chip chip-subject">Subject: What happened in Bradford last week?</span>
+          </div>
+
+          <p class="email-body-text">Hi [First Name],</p>
+          <p class="email-body-text">This quarter, the group ran three field trials, hosted our first Student Competition, and crossed a milestone: 5 full years of funded research. Here's what you need to know — and what's coming next.</p>
+
+          <div class="email-highlight-row">
+            <div class="email-highlight">
+              <span class="email-highlight-num">3</span>
+              <span class="email-highlight-label">Field Trials Q1</span>
+            </div>
+            <div class="email-highlight">
+              <span class="email-highlight-num">12</span>
+              <span class="email-highlight-label">Members Active</span>
+            </div>
+            <div class="email-highlight">
+              <span class="email-highlight-num">5yr</span>
+              <span class="email-highlight-label">Funding Milestone</span>
+            </div>
+          </div>
+
+          <div class="email-divider"></div>
+          <p class="email-body-text">The FarmDroid onion trial at Bradford Muck Station showed promising results in seeding precision. Full data summary in the report below.</p>
+          <a href="#" class="email-cta">Read the Q1 Report →</a>
+          <p class="email-body-text" style="font-size:0.75rem;color:#999;">You're receiving this as a registered member of the AgRobotics Working Group. Manage preferences anytime.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     CHAPTER 3 — ANALYTICS DASHBOARD
+════════════════════════════════════════════════ -->
+<section class="section" id="chapter-3">
+  <div class="section-label">Chapter 03</div>
+  <h2 class="section-title">Analytics & Reporting<br>Dashboard</h2>
+  <p class="section-lead">This is how I'd track digital performance for AgRobotics — and what I'd present at every Working Group meeting. Data-driven, visual, and actionable.</p>
+
+  <div class="dashboard reveal">
+    <div class="dashboard-header">
+      <span class="dashboard-title">AgRobotics WG · Digital Performance Report</span>
+      <span class="dashboard-period">Q1 2026 · Jan 1 – Mar 31</span>
+    </div>
+
+    <div class="dashboard-kpis">
+      <div class="kpi">
+        <div class="kpi-label">Website Sessions</div>
+        <div class="kpi-value">4,821</div>
+        <div class="kpi-change up">↑ 34% vs. Q4 2025</div>
+        <div class="kpi-bar"><div class="kpi-bar-fill" style="width:72%"></div></div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">LinkedIn Impressions</div>
+        <div class="kpi-value">18.4k</div>
+        <div class="kpi-change up">↑ 58% vs. Q4 2025</div>
+        <div class="kpi-bar"><div class="kpi-bar-fill" style="width:88%"></div></div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">Email Open Rate</div>
+        <div class="kpi-value">41%</div>
+        <div class="kpi-change up">↑ 12pts — industry avg: 22%</div>
+        <div class="kpi-bar"><div class="kpi-bar-fill" style="width:60%"></div></div>
+      </div>
+      <div class="kpi">
+        <div class="kpi-label">New Members (Q1)</div>
+        <div class="kpi-value">3</div>
+        <div class="kpi-change up">Referred via LinkedIn (2) + event (1)</div>
+        <div class="kpi-bar"><div class="kpi-bar-fill" style="width:40%"></div></div>
+      </div>
+    </div>
+
+    <div class="dashboard-body">
+      <div class="chart-area">
+        <div class="chart-title">Monthly Website Traffic vs. LinkedIn Engagement</div>
+        <p class="chart-sub">Sessions · Unique Visitors · LI Impressions (÷100) · Jan–Mar 2026</p>
+
+        <div class="bar-chart-wrap">
+          <!-- January -->
+          <div class="bar-col">
+            <div class="bar primary" style="height:55%"></div>
+            <div class="bar secondary" style="height:38%"></div>
+            <span class="bar-label">Jan</span>
+          </div>
+          <!-- February (demo day month) -->
+          <div class="bar-col">
+            <div class="bar primary" style="height:78%"></div>
+            <div class="bar secondary" style="height:62%"></div>
+            <span class="bar-label">Feb</span>
+          </div>
+          <!-- March -->
+          <div class="bar-col">
+            <div class="bar primary" style="height:90%"></div>
+            <div class="bar secondary" style="height:82%"></div>
+            <span class="bar-label">Mar</span>
+          </div>
+          <!-- April projection -->
+          <div class="bar-col" style="opacity:0.4">
+            <div class="bar primary" style="height:85%; border: 2px dashed var(--moss); background: transparent;"></div>
+            <div class="bar secondary" style="height:75%; border: 2px dashed var(--sage-pale); background: transparent;"></div>
+            <span class="bar-label">Apr ↗</span>
+          </div>
+        </div>
+
+        <div class="chart-legend">
+          <div class="legend-item">
+            <div class="legend-dot" style="background:var(--moss)"></div>
+            Website Sessions
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot" style="background:var(--sage-pale)"></div>
+            LinkedIn Impressions ÷100
+          </div>
+          <div class="legend-item" style="opacity:0.5">
+            <div class="legend-dot" style="border: 1.5px dashed var(--moss); background: transparent;"></div>
+            Projected
+          </div>
+        </div>
+      </div>
+
+      <div class="top-pages">
+        <div class="top-pages-title">Top Pages — Q1 2026</div>
+        <table class="pages-table">
+          <thead>
+            <tr>
+              <th>Page</th>
+              <th>Sessions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div>/home</div>
+                <div class="page-path">agroboticswg.com</div>
+                <div class="bar-mini"><div class="bar-mini-fill" style="width:100%"></div></div>
+              </td>
+              <td>1,840</td>
+            </tr>
+            <tr>
+              <td>
+                <div>/annual-report</div>
+                <div class="page-path">2024–25 Report</div>
+                <div class="bar-mini"><div class="bar-mini-fill" style="width:78%"></div></div>
+              </td>
+              <td>1,432</td>
+            </tr>
+            <tr>
+              <td>
+                <div>/student-competition</div>
+                <div class="page-path">New this year</div>
+                <div class="bar-mini"><div class="bar-mini-fill" style="width:62%"></div></div>
+              </td>
+              <td>1,140</td>
+            </tr>
+            <tr>
+              <td>
+                <div>/members</div>
+                <div class="page-path">Working Group roster</div>
+                <div class="bar-mini"><div class="bar-mini-fill" style="width:35%"></div></div>
+              </td>
+              <td>639</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="dashboard-insights">
+      <div class="insight">
+        <span class="insight-icon">📈</span>
+        <div class="insight-title">Demo days drive traffic spikes</div>
+        <p class="insight-text">Each field trial day generates a 3–4× lift in website and LinkedIn traffic. Posting same-day amplifies this window significantly.</p>
+      </div>
+      <div class="insight">
+        <span class="insight-icon">🎯</span>
+        <div class="insight-title">Student Competition page outperforming</div>
+        <p class="insight-text">New page already ranking #3. Targeted LinkedIn promotion + email campaign could push registrations 40% higher in Q2.</p>
+      </div>
+      <div class="insight">
+        <span class="insight-icon">📧</span>
+        <div class="insight-title">Email open rate nearly 2× industry avg</div>
+        <p class="insight-text">41% open rate signals strong member engagement. Segment sponsor list for a separate send — distinct content, distinct CTA.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════
+     CHAPTER 4 — EVENT COMMS KIT
+════════════════════════════════════════════════ -->
+<section class="section" id="chapter-4">
+  <div class="section-label">Chapter 04</div>
+  <h2 class="section-title">Student Competition —<br>Event Communications Kit</h2>
+  <p class="section-lead">First-edition events have no playbook. I'd build one from day one — so year two takes half the effort. Here's the starter kit.</p>
+
+  <div class="comms-layout">
+    <div>
+      <div class="comms-tabs">
+        <button class="tab-btn active" onclick="switchTab(this, 'tab-invite')">Invite Email</button>
+        <button class="tab-btn" onclick="switchTab(this, 'tab-judge')">Judge Outreach</button>
+        <button class="tab-btn" onclick="switchTab(this, 'tab-check')">Event Checklist</button>
+      </div>
+
+      <!-- TAB: INVITE EMAIL -->
+      <div class="tab-content active" id="tab-invite">
+        <div class="email-template reveal">
+          <div class="email-template-header">
+            <div class="email-template-label">Student Outreach Email · Template v1</div>
+            <div class="email-template-subject">Subject: Compete. Innovate. Shape Ontario agriculture. [Competition Name] is open.</div>
+          </div>
+          <div class="email-template-body">
+            <p>Hi <span class="email-field">[Student First Name]</span>,</p>
+            <p>The AgRobotics Working Group is hosting its first-ever student competition, and we're looking for the next generation of agricultural innovators from across Ontario.</p>
+            <p>Whether you're studying engineering, agri-business, environmental science, or food systems — if you have an idea for how technology can solve a real problem in agriculture, we want to hear it.</p>
+            <p><strong>What you'll get:</strong> Mentorship from industry leaders, access to working robotics platforms, and a chance to present to the people actively shaping the future of Ontario farming.</p>
+            <p><strong>Deadline to register:</strong> <span class="email-field">[Date]</span> · <strong>Competition day:</strong> <span class="email-field">[Date & Location]</span></p>
+            <p>Questions? Reply to this email — I'm happy to help. We hope to see you there.</p>
+            <p>Warm regards,<br><strong>Asli Polattas</strong><br>Project Coordinator, AgRobotics Working Group<br>Western Fair District</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: JUDGE OUTREACH -->
+      <div class="tab-content" id="tab-judge">
+        <div class="email-template reveal">
+          <div class="email-template-header">
+            <div class="email-template-label">Judge Outreach Email · Template v1</div>
+            <div class="email-template-subject">Subject: We'd be honoured to have you judge this year's AgRobotics Student Competition.</div>
+          </div>
+          <div class="email-template-body">
+            <p>Dear <span class="email-field">[Judge Name]</span>,</p>
+            <p>I'm reaching out on behalf of the AgRobotics Working Group at Western Fair District. We're launching our first student competition in <span class="email-field">[Month]</span>, and given your work at <span class="email-field">[Organization]</span>, we believe you'd bring exceptional perspective to the panel.</p>
+            <p><strong>Time commitment:</strong> Review submitted proposals in advance (~2 hrs), attend competition day <span class="email-field">[Date]</span> for live presentations (half-day), and participate in brief deliberation.</p>
+            <p>Judges will have full access to all research materials and trial results from the current program year — it's a valuable window into what Ontario's agri-tech community is building.</p>
+            <p>Would you be open to a 15-minute call to discuss? I'd be glad to share the full competition brief.</p>
+            <p>With appreciation,<br><strong>Asli Polattas</strong><br>Project Coordinator, AgRobotics Working Group</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: CHECKLIST -->
+      <div class="tab-content" id="tab-check">
+        <div class="checklist reveal">
+          <div class="checklist-header">Student Competition — Event Day Checklist</div>
+
+          <div class="checklist-section">
+            <div class="checklist-section-title">6 Weeks Before</div>
+            <div class="checklist-item"><div class="check-box checked"></div><span class="done">Confirm venue + A/V requirements</span></div>
+            <div class="checklist-item"><div class="check-box checked"></div><span class="done">Lock competition brief + judging rubric</span></div>
+            <div class="checklist-item"><div class="check-box checked"></div><span class="done">Send judge invitations (template above)</span></div>
+            <div class="checklist-item"><div class="check-box checked"></div><span class="done">Launch student registration + LinkedIn campaign</span></div>
+          </div>
+
+          <div class="checklist-section">
+            <div class="checklist-section-title">2 Weeks Before</div>
+            <div class="checklist-item"><div class="check-box checked"></div><span class="done">Send reminder email to registered students</span></div>
+            <div class="checklist-item"><div class="check-box"></div><span>Distribute proposal packages to judges</span></div>
+            <div class="checklist-item"><div class="check-box"></div><span>Prepare event-day run sheet + timing</span></div>
+            <div class="checklist-item"><div class="check-box"></div><span>Confirm catering / logistics with venue</span></div>
+          </div>
+
+          <div class="checklist-section">
+            <div class="checklist-section-title">Event Day</div>
+            <div class="checklist-item"><div class="check-box"></div><span>Arrival 90 min early — signage, A/V, registration table</span></div>
+            <div class="checklist-item"><div class="check-box"></div><span>Live social posts: photos, student quotes, robot demos</span></div>
+            <div class="checklist-item"><div class="check-box"></div><span>Judge briefing — rubric review, timing confirm</span></div>
+            <div class="checklist-item"><div class="check-box"></div><span>Collect attendee emails for mailing list</span></div>
+          </div>
+
+          <div class="checklist-section">
+            <div class="checklist-section-title">Within 48 Hours After</div>
+            <div class="checklist-item"><div class="check-box"></div><span>LinkedIn recap post — winner announcement + photos</span></div>
+            <div class="checklist-item"><div class="check-box"></div><span>Thank-you email to all participants and judges</span></div>
+            <div class="checklist-item"><div class="check-box"></div><span>Document learnings + archive all templates for Year 2</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="comms-right reveal">
+      <h3>My coordination philosophy.</h3>
+      <div class="approach-list">
+        <div class="approach-item">
+          <span class="approach-num">01</span>
+          <div class="approach-text">
+            <strong>Document everything — Year 2 should be effortless</strong>
+            <p>First-edition events are hard. I build templates, run sheets, and decision logs as I go, so the next coordinator inherits a complete playbook, not a blank page.</p>
+          </div>
+        </div>
+        <div class="approach-item">
+          <span class="approach-num">02</span>
+          <div class="approach-text">
+            <strong>Every event = 5 pieces of content</strong>
+            <p>Pre-event promo, live day posts, recap, data highlight, and a member/student quote card. One event should fill an entire content week.</p>
+          </div>
+        </div>
+        <div class="approach-item">
+          <span class="approach-num">03</span>
+          <div class="approach-text">
+            <strong>Stakeholders hear from me before they have to ask</strong>
+            <p>Judges get briefed. Students get reminded. Sponsors see their logo in the recap. Proactive communication is the difference between a smooth event and a stressful one.</p>
+          </div>
+        </div>
+        <div class="approach-item">
+          <span class="approach-num">04</span>
+          <div class="approach-text">
+            <strong>I come from this world — I know why it matters</strong>
+            <p>Growing up in an agriculture family in Antalya means I understand what's at stake when a robot fails a trial, or when a farmer takes a risk on new technology. That context makes my communications authentic.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CLOSING -->
+<section class="closing">
+  <div>
+    <h2 class="closing-title">Ready to start<br>on <em>day one.</em></h2>
+    <p class="closing-text">This blueprint isn't theoretical. Every piece here reflects tools I'm certified in, strategies I've applied, and a program I've spent real time studying. I didn't wait to be hired — I started doing the work.</p>
+    <div class="closing-links">
+      <a href="mailto:aslipolattas@gmail.com" class="closing-link">
+        aslipolattas@gmail.com
+        <span>→</span>
+      </a>
+      <a href="https://www.linkedin.com/in/asli-p-2364b12b8" target="_blank" class="closing-link">
+        LinkedIn Profile
+        <span>→</span>
+      </a>
+      <a href="https://proximal-germanium-b3f.notion.site/Marketing-Portfolio-Asli-Polattas-34c94500b32381ae8874d26ac397025b?pvs=143" target="_blank" class="closing-link">
+        Full Marketing Portfolio →
+        <span>→</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="closing-right">
+    <div class="closing-label">Certifications</div>
+    <div class="cert-list">
+      <div class="cert-badge">
+        <span class="cert-badge-icon">📊</span>
+        <div class="cert-badge-name">Google Analytics</div>
+      </div>
+      <div class="cert-badge">
+        <span class="cert-badge-icon">🎯</span>
+        <div class="cert-badge-name">HubSpot Content</div>
+      </div>
+      <div class="cert-badge">
+        <span class="cert-badge-icon">📧</span>
+        <div class="cert-badge-name">Mailchimp</div>
+      </div>
+      <div class="cert-badge">
+        <span class="cert-badge-icon">🔄</span>
+        <div class="cert-badge-name">HubSpot Inbound</div>
+      </div>
+    </div>
+
+    <div>
+      <div class="closing-label">Education</div>
+      <div style="color:rgba(245,240,232,0.5);font-size:0.82rem;line-height:1.8;">
+        <div style="color:var(--cream);font-weight:700;">Fanshawe College</div>
+        Postgrad Diploma — Marketing · Dean's Honour Roll · 2025
+        <br><br>
+        <div style="color:var(--cream);font-weight:700;">Dokuz Eylül University</div>
+        BBA — Business Administration · İzmir, TR
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>ASLI POLATTAS · AgRobotics Marketing Blueprint · 2026</p>
+  <p>Prepared for Western Fair District · Project Coordinator Application</p>
+</footer>
+
+<script>
+// Intersection Observer for reveal animations
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// Tab switching
+function switchTab(btn, tabId) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(tabId).classList.add('active');
+}
+
+// Animate KPI bars on scroll
+const kpiObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.querySelectorAll('.kpi-bar-fill').forEach(bar => {
+        bar.style.width = bar.style.width; // trigger repaint
+      });
+    }
+  });
+}, { threshold: 0.5 });
+
+const dashboard = document.querySelector('.dashboard');
+if (dashboard) kpiObserver.observe(dashboard);
+</script>
+</body>
+</html>
